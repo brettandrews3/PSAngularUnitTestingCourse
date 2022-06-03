@@ -120,5 +120,7 @@
       }
     }
   },
-  "defaultProject": "test2"
+  "cli": {
+    "analytics": "85591798-3e41-4ba5-a610-87f2baa0f4fb"
+  }
 }
