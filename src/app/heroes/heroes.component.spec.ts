@@ -63,5 +63,23 @@ describe('HeroesComponent', () => {
       // Assert: confirm that HEROES returns array of 2 objects, not 3
       expect(component.heroes.length).toBe(2);
     })
+
+    // Interaction test:
+    it('should call deleteHero() with the correct hero', () => {
+      // Arrange
+      mockHeroService.deleteHero.and.returnValue(of(true));
+      component.heroes = HEROES;
+
+      // Act
+      component.delete(HEROES[2]);
+
+      // Assert
+      //expect(mockHeroService.deleteHero).toHaveBeenCalled()  OR use this:
+      expect(mockHeroService.deleteHero).toHaveBeenCalledWith(HEROES[2]);
+    })
   })
+
+  // Interaction tests: check that something happened between tested class
+  // and a collaborator class:
+
 })
