@@ -30,4 +30,28 @@ describe('HeroComponent (shallow tests)', () => {
     // Assert
     expect(fixture.componentInstance.hero.name).toEqual('SuperDave');
   })
+
+  // PS Unit Tests 4.5 - Testing Rendered HTML
+  it('should render the hero name in an anchor tag', () => {
+    // Arrange
+    // We can see the hero name anchored out in hero.component.html, line 2
+    // detectChanges is a wrapper for the component & its template.
+    // It tells component: run change detection, update any existing bindings on component
+    // Here, it looks at id binding and name binding
+    fixture.componentInstance.hero = {id: 1, name: 'SuperDave', strength: 3};
+    fixture.detectChanges();
+
+    // Act
+
+    // Assert: grab anchor tag and look at its contents
+    // Using fixture.componentInstance gets a handle to the created instance tested
+    // nativeElement gets handle to the DOM element representing the template's container,
+    // connecting us to the line 1 anchor {hero.id} in hero.component.html
+    // textContent takes the inner text, ignores HTML, & ties it all together.
+    // Thus, everything inside the anchor tag is '{hero.id} {hero.name}'
+    expect(fixture.nativeElement
+                  .querySelector('a')
+                  .textContent)
+                  .toContain('SuperDave')
+  })
 })
