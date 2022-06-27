@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { By } from "@angular/platform-browser";
 import { HeroComponent } from "./hero.component"
 
 describe('HeroComponent (shallow tests)', () => {
@@ -32,6 +33,7 @@ describe('HeroComponent (shallow tests)', () => {
   })
 
   // PS Unit Tests 4.5 - Testing Rendered HTML
+  // PS Unit Tests 4.6 - nativeElement vs. debugElement
   it('should render the hero name in an anchor tag', () => {
     // Arrange
     // We can see the hero name anchored out in hero.component.html, line 2
@@ -40,6 +42,11 @@ describe('HeroComponent (shallow tests)', () => {
     // Here, it looks at id binding and name binding
     fixture.componentInstance.hero = {id: 1, name: 'SuperDave', strength: 3};
     fixture.detectChanges();
+
+    // PS Unit Tests 4.6: debugElement is a wrapper w/ diff functionality vs nativeElement
+    let deA = fixture.debugElement.query(By.css('a'));
+    //expect(fixture.debugElement.query(By.css('a')));
+    expect(deA.nativeElement.textContent).toContain('SuperDave');
 
     // Act
 
