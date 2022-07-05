@@ -1,5 +1,6 @@
 import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { By } from "@angular/platform-browser";
 import { of } from "rxjs/internal/observable/of";
 import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
@@ -47,8 +48,16 @@ describe('HeroesComponent (shallow tests)', () => {
 
     expect(fixture.componentInstance.heroes.length).toBe(3);
   })
+
+  it('should create one li for each hero', () => {
+    mockHeroService.getHeroes.and.returnValue(of(HEROES))
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('li')).length).toBe(3);
+  })
 })
 
 // PS Unit Tests 4.7 - More Complex Shallow Integration
 // PS Unit Tests 4.8 - Mocking an Injected Service
 // PS Unit Tests 4.9 - Mocking Child Components
+// PS Unit Tests 4.10 - Dealing w/ Lists of Elements
