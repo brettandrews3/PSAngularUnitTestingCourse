@@ -1,6 +1,7 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { of } from "rxjs/internal/observable/of";
+import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
 import { HeroesComponent } from "./heroes.component"
 
@@ -8,6 +9,16 @@ describe('HeroesComponent (shallow tests)', () => {
   let fixture: ComponentFixture<HeroesComponent>;
   let mockHeroService;
   let HEROES;
+
+  @Component({
+    selector: 'app-hero',
+    template: '<div></div>'
+
+  })
+  class FakeHeroComponent {
+    @Input() hero: Hero;
+    //@Output() delete = new EventEmitter();
+  }
 
   beforeEach(() => {
     HEROES = [
@@ -18,11 +29,14 @@ describe('HeroesComponent (shallow tests)', () => {
     mockHeroService = jasmine.createSpyObj(['getHeroes', 'addHero', 'deleteHero']);
 
     TestBed.configureTestingModule({
-      declarations: [HeroesComponent],
+      declarations: [
+        HeroesComponent,
+        FakeHeroComponent
+      ],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      // schemas: [NO_ERRORS_SCHEMA]
     })
     fixture = TestBed.createComponent(HeroesComponent);
   })
@@ -37,3 +51,4 @@ describe('HeroesComponent (shallow tests)', () => {
 
 // PS Unit Tests 4.7 - More Complex Shallow Integration
 // PS Unit Tests 4.8 - Mocking an Injected Service
+// PS Unit Tests 4.9 - Mocking Child Components
