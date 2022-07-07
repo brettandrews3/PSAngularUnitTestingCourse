@@ -1,8 +1,7 @@
-import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs/internal/observable/of";
-import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
 import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "./heroes.component"
@@ -33,13 +32,27 @@ describe('HeroesComponent (deep tests)', () => {
     fixture = TestBed.createComponent(HeroesComponent);
     mockHeroService.getHeroes.and.returnValue(of(HEROES));
 
-    fixture.detectChanges();
+    //fixture.detectChanges();
   });
 
-  it('should be true', () => {
-    expect(true).toBe(true);
+  it('should render each hero as a HeroComponent', () => {
+    // Arrange: in the BeforeEach() as fixture and mockHeroService
+
+    // Act: triggers detectChanges, which triggers ngOnInit()
+    fixture.detectChanges();
+
+    // Assert: find child elements through a directive
+    // debugElement gets list of all app-hero elements created in the
+    // <ul> on heroes.component.html
+    const heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
+    expect(heroComponentDEs.length).toEqual(3);
+
+    for(let i = 0; i < heroComponentDEs.length; i++) {
+      expect(heroComponentDEs[i].componentInstance.hero).toEqual(HEROES[i]);
+    }
   })
 
 });
 
 // PS Unit Tests 5.2 - Creating a Deep Integration Test
+// PS Unit Tests 5.3 - Finding Elements by Directive
