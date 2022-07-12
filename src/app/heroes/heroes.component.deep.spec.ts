@@ -50,9 +50,26 @@ describe('HeroesComponent (deep tests)', () => {
     for(let i = 0; i < heroComponentDEs.length; i++) {
       expect(heroComponentDEs[i].componentInstance.hero).toEqual(HEROES[i]);
     }
+  });
+
+  // Unit Tests 6.2: Trigger Events on Elements
+  // const heroComponent is looking for the similarly named directive on ln 15 of heroes.component.html
+  it(`should call heroService.deleteHero when the Hero Component's
+      delete button is clicked`, () => {
+        spyOn(fixture.componentInstance, 'delete');
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        fixture.detectChanges();
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        heroComponents[0].query(By.css('button'))
+        .triggerEventHandler('click', {stopPropagation: () => {} });
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
   })
 
 });
 
 // PS Unit Tests 5.2 - Creating a Deep Integration Test
 // PS Unit Tests 5.3 - Finding Elements by Directive
+// PS Unit Tests 6.2 - Triggering Events on Elements
