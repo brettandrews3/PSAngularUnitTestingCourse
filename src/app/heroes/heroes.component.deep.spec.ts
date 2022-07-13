@@ -65,7 +65,10 @@ describe('HeroesComponent (deep tests)', () => {
 
         // 6.3 New approach: tell child component to raise the event, then test that parent component
         // is listening for & responds to that event
-        (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+        //(<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+
+        // 6.4 approach: tell the debug element to just trigger the delete() event
+        heroComponents[0].triggerEventHandler('delete', null);
 
         // 6.2 Initial approach: trigger by event on the element by watching for 'click'
         //heroComponents[0].query(By.css('button'))
@@ -80,3 +83,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 5.3 - Finding Elements by Directive
 // PS Unit Tests 6.2 - Triggering Events on Elements
 // PS Unit Tests 6.3 - Emitting Events from Children
+// PS Unit Tests 6.4 - Raising Event on Child Directive
