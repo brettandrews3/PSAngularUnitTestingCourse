@@ -58,7 +58,7 @@ describe('HeroesComponent', () => {
       component.heroes = HEROES;
 
       // Act: delete the Hero at index 2
-      component.delete(HEROES[2]);
+      component.deleteHero(HEROES[2]);
 
       // Assert: confirm that HEROES returns array of 2 objects, not 3
       expect(component.heroes.length).toBe(2);
@@ -71,7 +71,7 @@ describe('HeroesComponent', () => {
       component.heroes = HEROES;
 
       // Act
-      component.delete(HEROES[2]);
+      component.deleteHero(HEROES[2]);
 
       // Assert
       //expect(mockHeroService.deleteHero).toHaveBeenCalled()  OR use this:

@@ -56,16 +56,22 @@ describe('HeroesComponent (deep tests)', () => {
   // const heroComponent is looking for the similarly named directive on ln 15 of heroes.component.html
   it(`should call heroService.deleteHero when the Hero Component's
       delete button is clicked`, () => {
-        spyOn(fixture.componentInstance, 'delete');
+        spyOn(fixture.componentInstance, 'deleteHero');
         mockHeroService.getHeroes.and.returnValue(of(HEROES));
 
         fixture.detectChanges();
 
         const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
-        heroComponents[0].query(By.css('button'))
-        .triggerEventHandler('click', {stopPropagation: () => {} });
 
-        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+        // 6.3 New approach: tell child component to raise the event, then test that parent component
+        // is listening for & responds to that event
+        (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+
+        // 6.2 Initial approach: trigger by event on the element by watching for 'click'
+        //heroComponents[0].query(By.css('button'))
+        //.triggerEventHandler('click', {stopPropagation: () => {} });
+
+        expect(fixture.componentInstance.deleteHero).toHaveBeenCalledWith(HEROES[0]);
   })
 
 });
@@ -73,3 +79,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 5.2 - Creating a Deep Integration Test
 // PS Unit Tests 5.3 - Finding Elements by Directive
 // PS Unit Tests 6.2 - Triggering Events on Elements
+// PS Unit Tests 6.3 - Emitting Events from Children
