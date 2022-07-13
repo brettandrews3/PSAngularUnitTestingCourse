@@ -67,7 +67,7 @@ describe('HeroesComponent (deep tests)', () => {
         // is listening for & responds to that event
         //(<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
 
-        // 6.4 approach: tell the debug element to just trigger the delete() event
+        // 6.4 New new approach: tell the debug element to just trigger the delete() event
         heroComponents[0].triggerEventHandler('delete', null);
 
         // 6.2 Initial approach: trigger by event on the element by watching for 'click'
@@ -75,6 +75,30 @@ describe('HeroesComponent (deep tests)', () => {
         //.triggerEventHandler('click', {stopPropagation: () => {} });
 
         expect(fixture.componentInstance.deleteHero).toHaveBeenCalledWith(HEROES[0]);
+  });
+
+  // 6.5 Test adding a new hero to the hero list when using add button in the application
+  // The test interacts with the components in heroes.component.html
+  // addButton is querying all the buttons in the DOM, using the add button only in 1st position
+  it('should add a new hero to the hero list when add button is clicked', () => {
+    // Arrange: get HEROES[]; setup new hero, inputElement, add button from heroes.component.html
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    fixture.detectChanges();
+    const name = 'Mr. Cool as Ice';
+    mockHeroService.addHero.and.returnValue(of({id: 5, name: name, strength: 32}));
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    const addButton = fixture.debugElement.queryAll(By.css('button'))[0];
+
+    // Act: set inputElement's value to the 'name' variable created in this test
+    inputElement.value = name;
+    addButton.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    // Grab text content of all our heroes
+    const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+
+    // Assert: check heroText for new hero Mr. Cool as Ice
+    expect(heroText).toContain(name);
   })
 
 });
@@ -84,3 +108,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 6.2 - Triggering Events on Elements
 // PS Unit Tests 6.3 - Emitting Events from Children
 // PS Unit Tests 6.4 - Raising Event on Child Directive
+// PS Unit Tests 6.5 - Interacting w/ Input Boxes
