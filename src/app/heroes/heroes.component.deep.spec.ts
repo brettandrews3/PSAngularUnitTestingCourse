@@ -109,3 +109,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 6.3 - Emitting Events from Children
 // PS Unit Tests 6.4 - Raising Event on Child Directive
 // PS Unit Tests 6.5 - Interacting w/ Input Boxes
+// PS Unit Tests 6.6 - Testing w/ ActivatedRoute
