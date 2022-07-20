@@ -1,11 +1,16 @@
-import { TestBed } from "@angular/core/testing"
+import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { ActivatedRoute } from "@angular/router";
 import { HeroService } from "../hero.service";
 import { HeroDetailComponent } from "./hero-detail.component";
 import { Location } from '@angular/common';
+import { of } from "rxjs/internal/observable/of";
+import { FormsModule } from "@angular/forms";
 
 describe('HeroDetailComponent', () => {
-  let fixture, mockActivatedRoute, mockHeroService, mockLocation;
+  // 6.7 - createComponent in h2 tag test returns a ComponentFixture w/ subtype of
+  // actual component contained within it.
+  let fixture: ComponentFixture<HeroDetailComponent>;
+  let mockActivatedRoute, mockHeroService, mockLocation;
 
   beforeEach(() => {
     // See video @ 4:30 for explanation***
@@ -18,6 +23,8 @@ describe('HeroDetailComponent', () => {
     mockLocation = jasmine.createSpyObj(['back']);
 
     TestBed.configureTestingModule({
+      // 6.7 - import FormsModule to allow h2 test below to access ngModel in the HTML file
+      imports: [FormsModule],
       declarations: [HeroDetailComponent],
       providers: [
         {provide: ActivatedRoute, useValue: mockActivatedRoute},
@@ -27,7 +34,21 @@ describe('HeroDetailComponent', () => {
     });
 
     fixture = TestBed.createComponent(HeroDetailComponent);
+
+    // This returns the actual data going into Hero property from ln 28 in hero-detail.component.ts
+    mockHeroService.getHero.and.returnValue(of({id: 420, name: 'SuperDude', strength: 69}));
+  })
+
+  // Unit Tests 6.7: new test: check that hero name is rendered correctly
+  // Hero property in hero-detail is rendered into an h2 tag in the template: hero-detail.component.html, ln 2
+  it('should render hero name in an h2 tag', () => {
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(fixture.nativeElement.querySelector('h2').textContent).toContain('SUPERDUDE');
   })
 })
 
 // PS Unit Tests 6.6 - Testing w/ActivatedRoute
+// PS Unit Tests 6.7 - Dealing w/ ngModel
