@@ -10,7 +10,7 @@ import { HeroesComponent } from "./heroes.component"
 // Listen to the 'click' event on the parent DOM node. Call onClick() when event is fired.
 @Directive({
   selector: '[routerLink]',
-  host: { '(click)': 'onclick()' }
+  host: { '(click)': 'onClick()' }
 })
 
 // Stub needs to take in param of the routerLink attribute. Use @Input property
