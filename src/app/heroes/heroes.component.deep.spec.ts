@@ -1,10 +1,30 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Directive, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { By } from "@angular/platform-browser";
 import { of } from "rxjs/internal/observable/of";
 import { HeroService } from "../hero.service";
 import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "./heroes.component"
+
+// PS 6.8: create a Directive to handle RouterLink in hero.component.html
+@Directive({
+  selector: '[routerLink]',
+  // Listen to the 'click' event on the parent DOM node. Call onClick() when event is fired.
+  host: { '(click)': 'onclick()' }
+})
+
+// Stub needs to take in param of the routerLink attribute. Use @Input property
+// and give it the same name as the directive. Then, watch the 'click' event
+// on the DOM element that this routerLink is on. When clicked, capture that fact
+// and store what routerLink's path was set to. Otherwise, the onClick() stays null.
+export class RouterLinkDirectiveStub {
+  @Input('routerLink') linkParams: any;
+  navigatedTo: any = null;
+
+  onClick() {
+    this.navigatedTo = this.linkParams;
+  }
+}
 
 describe('HeroesComponent (deep tests)', () => {
   let fixture: ComponentFixture<HeroesComponent>;
@@ -22,12 +42,14 @@ describe('HeroesComponent (deep tests)', () => {
     TestBed.configureTestingModule({
       declarations: [
         HeroesComponent,
-        HeroComponent
+        HeroComponent,
+        RouterLinkDirectiveStub // PS 6.8: added this module
       ],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      // PS 6.8: Schema checks for unknown elements, attributes. Commented out for lesson
+      //schemas: [NO_ERRORS_SCHEMA]
     })
     fixture = TestBed.createComponent(HeroesComponent);
     mockHeroService.getHeroes.and.returnValue(of(HEROES));
@@ -110,3 +132,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 6.4 - Raising Event on Child Directive
 // PS Unit Tests 6.5 - Interacting w/ Input Boxes
 // PS Unit Tests 6.6 - Testing w/ ActivatedRoute
+// PS Unit Tests 6.8 - Mocking the RouterLink
