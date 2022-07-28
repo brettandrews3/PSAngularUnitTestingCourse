@@ -7,9 +7,9 @@ import { HeroComponent } from "../hero/hero.component";
 import { HeroesComponent } from "./heroes.component"
 
 // PS 6.8: create a Directive to handle RouterLink in hero.component.html
+// Listen to the 'click' event on the parent DOM node. Call onClick() when event is fired.
 @Directive({
   selector: '[routerLink]',
-  // Listen to the 'click' event on the parent DOM node. Call onClick() when event is fired.
   host: { '(click)': 'onclick()' }
 })
 
@@ -43,7 +43,7 @@ describe('HeroesComponent (deep tests)', () => {
       declarations: [
         HeroesComponent,
         HeroComponent,
-        RouterLinkDirectiveStub // PS 6.8: added this module
+        RouterLinkDirectiveStub
       ],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
@@ -121,6 +121,23 @@ describe('HeroesComponent (deep tests)', () => {
 
     // Assert: check heroText for new hero Mr. Cool as Ice
     expect(heroText).toContain(name);
+  });
+
+  // PS 6.9: testing the RouterLink by looking at route of the 1st hero: "/detail/{{hero.id}}"
+  it('should have the correct route for the first hero', () => {
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    fixture.detectChanges();
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+
+    let routerLink = heroComponents[0]
+      .query(By.directive(RouterLinkDirectiveStub))
+      .injector.get(RouterLinkDirectiveStub);
+
+    // get the anchor tag. 'click' should set anchor tag to correct property
+    heroComponents[0].query(By.css('a')).triggerEventHandler('click', null);
+
+    // Assert
+    expect(routerLink.navigatedTo).toBe('/detail/1');
   })
 
 });
@@ -133,3 +150,4 @@ describe('HeroesComponent (deep tests)', () => {
 // PS Unit Tests 6.5 - Interacting w/ Input Boxes
 // PS Unit Tests 6.6 - Testing w/ ActivatedRoute
 // PS Unit Tests 6.8 - Mocking the RouterLink
+// PS Unit Tests 6.9 - Testing the RouterLink
