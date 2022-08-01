@@ -47,8 +47,24 @@ describe('HeroDetailComponent', () => {
 
     // Assert
     expect(fixture.nativeElement.querySelector('h2').textContent).toContain('SUPERDUDE');
+  });
+
+  // 7.3: Adding new test. returnValue() returns an empty object because we ignore the return value
+  // in hero-detail.component.ts save(), where subscribe() returns nothing.
+  // 'done' param just below tells Jasmine that it's an async test
+  it('should call updateHero when save() is called', (done) => {
+    mockHeroService.updateHero.and.returnValue(of({}));
+    fixture.detectChanges();
+
+    fixture.componentInstance.save();
+
+    setTimeout(() => {
+      expect(mockHeroService.updateHero).toHaveBeenCalled();
+      done();
+    }, 300);
   })
 })
 
 // PS Unit Tests 6.6 - Testing w/ActivatedRoute
 // PS Unit Tests 6.7 - Dealing w/ ngModel
+// PS Unit Tests 7.3 - Basic Async Testing
