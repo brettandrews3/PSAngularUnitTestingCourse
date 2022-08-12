@@ -36,11 +36,28 @@ export class HeroDetailComponent implements OnInit {
   // instead of the usual callback fn. We tell save() to wait 250ms before
   // pinging the server. 'false' tells debounce() that we don't want to execute
   // immediately.
- save(): void {
+ /*
+  save(): void {
   debounce(() => {
     this.heroService.updateHero(this.hero)
       .subscribe(() => this.goBack());
   }, 250, false)();
+}
+*/
+
+// 7.5: remove debounce
+save(): void {
+  someThirdPartyPromise().then(() => {
+   this.heroService.updateHero(this.hero)
+      .subscribe(() => this.goBack());
+  });
+}
+
+// 7.5: Adding in a function that makes a promise
+function someThirdPartyPromise() {
+  return new Promise((resolve) => {
+    resolve(null);
+  })
 }
 
 // PS Unit Tests 7.2 - Adding Async Code

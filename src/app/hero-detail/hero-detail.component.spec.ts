@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from "@angular/core/testing"
 import { ActivatedRoute } from "@angular/router";
 import { HeroService } from "../hero.service";
 import { HeroDetailComponent } from "./hero-detail.component";
@@ -52,19 +52,40 @@ describe('HeroDetailComponent', () => {
   // 7.3: Adding new test. returnValue() returns an empty object because we ignore the return value
   // in hero-detail.component.ts save(), where subscribe() returns nothing.
   // 'done' param just below tells Jasmine that it's an async test
-  it('should call updateHero when save() is called', (done) => {
+  // 7.4: Adding fakeAsync to the test. fakeAsync() returns another fn passed to the test. With fakeAsync()
+  // wrapping the callback fn, we can treat all the async code as synchronous.
+  // tick() allows us to move the test forward by x milliseconds. The test will call save() and tick
+  // forward 250ms to call any code that should be called inside that timeframe.
+
+  // it('should call updateHero when save() is called', fakeAsync(() => {
+  //   mockHeroService.updateHero.and.returnValue(of({}));
+  //   fixture.detectChanges();
+
+  //   fixture.componentInstance.save();
+  //   tick(250);
+
+  //   expect(mockHeroService.updateHero).toHaveBeenCalled();
+  //   }))
+  // })
+
+  // 7.5: Replaced fakeAsync w/ waitForAsync. Internally, the save() is async internally because
+  // it's a promise that waits for the promise to resolve. Left as-is, the test will fail due to
+  // updateHero() not running. We add whenStable() to wait for any promises to resolve.
+  it('should call updateHero when save() is called', waitForAsync(() => {
     mockHeroService.updateHero.and.returnValue(of({}));
     fixture.detectChanges();
 
     fixture.componentInstance.save();
 
-    setTimeout(() => {
+    fixture.whenStable().then(() => {
       expect(mockHeroService.updateHero).toHaveBeenCalled();
-      done();
-    }, 300);
-  })
+    })
+  }))
+
 })
 
 // PS Unit Tests 6.6 - Testing w/ActivatedRoute
 // PS Unit Tests 6.7 - Dealing w/ ngModel
 // PS Unit Tests 7.3 - Basic Async Testing
+// PS Unit Tests 7.4 - Using fakeASync Helper
+// PS Unit Tests 7.5 - Using waitForAsync Helper
