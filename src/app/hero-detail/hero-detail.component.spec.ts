@@ -89,3 +89,4 @@ describe('HeroDetailComponent', () => {
 // PS Unit Tests 7.3 - Basic Async Testing
 // PS Unit Tests 7.4 - Using fakeASync Helper
 // PS Unit Tests 7.5 - Using waitForAsync Helper
+// PS Unit Tests 7.6 - Code Coverage
